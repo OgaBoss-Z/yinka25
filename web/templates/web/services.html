@@ -1,0 +1,102 @@
+{% extends 'web/base.html' %}
+{% load static %}
+
+{% block content %}    
+    <section class="page-header page-header-modern custom-page-header bg-color-quaternary">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 order-2 order-md-1 align-self-center p-static">
+                    <h1 class="font-weight-bold text-9 text-color-secondary appear-animation" data-appear-animation="fadeInRightShorter" data-appear-animation-delay="100">Services</h1>
+                </div>
+                <div class="col-md-4 order-1 order-md-2 align-self-center">
+                    <ul class="breadcrumb d-block text-md-end appear-animation" data-appear-animation="fadeInLeftShorter" data-appear-animation-delay="100">
+                        <li><a href="{% url 'home-page' %}">Home</a></li>
+                        <li class="active">Services</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-9">
+                {% for service in service_top %}                
+                <p class="m-0 p-0 appear-animation" data-appear-animation="fadeIn" data-appear-animation-delay="100">
+                    {{service.description|safe}}
+                </p>
+                {% endfor %}
+            </div>
+            <div class="col-lg-3 pt-4 pt-lg-0">
+                {% for service in service_top %}
+                <div class="card border-radius-0 box-shadow-1 border-0 me-lg-3 p-3 mb-3 mb-lg-0">
+                    <img src="{{service.image.url}}" class="img-fluid border-radius-0" alt="">
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col py-5">
+                <hr class="m-0">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p class="text-uppercase font-weight-semibold mb-1 text-color-primary appear-animation" data-appear-animation="fadeInRightShorter" data-appear-animation-delay="100"><span class="line-pre-title bg-color-primary"></span>Our Services</p>
+                <h2 class="text-color-secondary font-weight-bold text-capitalize mb-4 custom-letter-spacing-2 custom-text-1 appear-animation" data-appear-animation="fadeInRightShorter" data-appear-animation-delay="100">What We Do</h2>
+
+                <div class="accordion accordion-sm mb-3 appear-animation" data-appear-animation="fadeInRightShorter" data-appear-animation-delay="100" id="accordionServices">
+                    {% for service in services %}
+                        <div class="border-radius mb-1 border-0 card-accordion-our-services-container">
+                            <div class="card-header py-2 bg-color-quaternary">
+                                <h4 class="card-title m-0">
+                                    <a class="accordion-toggle text-color-tertiary font-weight-semibold" data-bs-toggle="collapse" data-bs-parent="#accordionServices" href="#collapse3One">
+                                        {{service.name}}
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapse3One" class="collapse card-accordion-our-services show">
+                                <div class="card-body">
+                                    <p class="mb-4 pb-2">
+                                        {{service.top_description|safe}}
+                                    </p>
+
+                                    <div class="row no-gutters">
+                                        <div class="col-md">
+                                            <img src="{{service.image.url}}" alt="Service image" class="float-start me-4 mb-2">
+                                            <p class="mb-2 pb-2">
+                                                {{service.img_description|safe}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<section class="are-you-looking-for bg-color-secondary">
+		<div class="container">
+			<div class="row justify-content-between">
+				<div class="col-xl-5">
+					<p class="text-uppercase font-weight-semibold mb-1 text-color-light appear-animation" data-appear-animation="fadeInRightShorter" data-appear-animation-delay="100"><span class="line-pre-title bg-color-primary appear-animation" data-appear-animation="fadeInRightShorter" data-appear-animation-delay="200"></span>Are you looking for </p>
+					<h2 class="text-color-light font-weight-bold text-capitalize mb-1 letter-spacing-08 font-size-32 appear-animation" data-appear-animation="fadeInRightShorter" data-appear-animation-delay="200">Estate Surveyors and Valuers?</h2>
+					<p class="font-weight-semibold text-color-light mb-0 appear-animation" data-appear-animation="fadeInRightShorter" data-appear-animation-delay="300">Schedule an appointment right now!</p>
+				</div>
+				<div class="col-xl-6 d-flex align-items-start align-items-sm-center justify-content-start justify-content-xl-end mt-4 mt-xl-0 flex-column flex-sm-row">
+					<span class="are-you-looking-for-phone py-2 d-flex align-items-center text-color-light font-weight-semibold text-uppercase text-4 mb-4 mb-md-0 appear-animation" data-appear-animation="fadeInLeftShorter" data-appear-animation-delay="500">
+						<span>
+							<img width="18" height="25" src="{% static 'web/img/home/icons/phone.svg' %}" alt="Phone">
+						</span>
+						<a class="text-color-light text-decoration-none" href="tel:123-456-7890">(123) 456-7890</a>
+					</span>
+					<a href="" class="btn btn-primary custom-btn text-center text-uppercase text-decoration-none border-0 py-0 px-5 font-weight-semibold appear-animation" data-appear-animation="fadeInLeftShorter" data-appear-animation-delay="600">free initial consultation</a>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
