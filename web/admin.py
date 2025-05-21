@@ -12,6 +12,11 @@ class Home_what_we_doAdmin(admin.ModelAdmin):
 admin.site.register(Home_what_we_do, Home_what_we_doAdmin)
 
 
+class Home_successAdmin(admin.ModelAdmin):
+    list_display = ['company_name', 'created', 'updated']
+admin.site.register(Home_success, Home_successAdmin)
+
+
 class ImageInline(admin.TabularInline):
     model = ProjectImage
     extra = 3

@@ -544,7 +544,6 @@ html[dir="rtl"] .slider-container .line-pre-title {
 }
 
 .coaching-consulting .col-coaching-consulting-imgs .card:nth-child(1) {
-		z-index: 1;
 		top: 0;
 		right: 20px;
 }

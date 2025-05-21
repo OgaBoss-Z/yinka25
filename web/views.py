@@ -1,13 +1,17 @@
 from django.shortcuts import render
 from .models import *
 
+
 # Create your views here.
+
 def home(request):
     services = Home_services.objects.order_by('?')[:3]
+    success_story = Home_success.objects.order_by('?')[:1]
     what_we_do = Home_what_we_do.objects.all()[:1]
     context = {
         'title': 'Home',
         'services' : services,
+        'success_story': success_story,
         'what_we_do' : what_we_do,
         }
     return render(request, 'web/home.html', context)

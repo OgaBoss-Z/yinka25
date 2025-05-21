@@ -41,6 +41,22 @@ class Home_what_we_do(models.Model):
     def __str__(self):
         return self.name
     
+class Home_success(models.Model):
+    company_name = models.CharField(max_length=100)
+    content = RichTextUploadingField()
+    image = models.ImageField(upload_to='home_service_img')
+    created = models.DateField(default=timezone.now)
+    updated = models.DateField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Home Success Section'
+        verbose_name_plural = 'Home Success Section' 
+        ordering = ['company_name'] 
+
+    def __str__(self):
+        return self.company_name
+    
+
 # Project page detail page
 class Projects(models.Model):
     name = models.CharField(max_length=100)
