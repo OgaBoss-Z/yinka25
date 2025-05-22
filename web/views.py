@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from .models import *
-
+from django.core.mail import send_mail
+from django.conf import settings
+from django.shortcuts import render, redirect
+from .forms import ContactForm
+import logging 
 
 # Create your views here.
 
@@ -33,14 +37,43 @@ def services(request):
     return render(request, 'web/services.html', context)
 
 
-def projects(request):
-    context = {'title': 'Project'}
-    return render(request, 'web/project.html', context)
+def success_page(request):
+    context = {'title': 'Success Page'}
+    return render(request, 'web/success.html', context)
 
 
 def contact_us(request):
     context = {'title': 'Contact Us'}
     return render(request, 'web/contact.html', context)
+
+
+logger = logging.getLogger(__name__)
+
+def contact_view(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+
+            full_message = f"From: {name} <{email}>\n\n{message}"
+            try:
+                send_mail(
+                    subject,
+                    full_message,
+                    email,
+                    ['yinkakayode25@gmail.com'],
+                )
+                return render(request, 'web/success.html')
+            except Exception as e:
+                print('EMAIL ERROR: ', e)
+                return render(request, 'web/project.html')
+        return render(request, 'web/contact.html', {'title': 'Contact Us', 'form': form})
+    else:
+        form = ContactForm()
+        return render(request, 'web/contact.html', {'title': 'Contact Us', 'form': form})
 
 
 
