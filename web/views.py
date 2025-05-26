@@ -53,27 +53,16 @@ def contact_view(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            subject = form.cleaned_data['subject']
-            message = form.cleaned_data['message']
-
-            full_message = f"From: {name} <{email}>\n\n{message}"
-            try:
-                send_mail(
-                    subject,
-                    full_message,
-                    email,
-                    ['yinkakayode25@gmail.com'],
-                )
-                return render(request, 'web/success.html')
-            except Exception as e:
-                print('EMAIL ERROR: ', e)
-                return render(request, 'web/project.html')
-        return render(request, 'web/contact.html', {'title': 'Contact Us', 'form': form})
+            ContactMessage.objects.create(
+                name = form.cleaned_data['name'],
+                email = form.cleaned_data['email'],
+                subject = form.cleaned_data['subject'],
+                message = form.cleaned_data['message'],
+            )
+            return render(request, 'web/success.html')        
     else:
         form = ContactForm()
-        return render(request, 'web/contact.html', {'title': 'Contact Us', 'form': form})
+    return render(request, 'web/contact.html', {'title': 'Contact Us', 'form': form})
 
 
 

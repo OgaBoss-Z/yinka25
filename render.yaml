@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: yinka-web-app
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn myproject.wsgi"
+    autoDeploy: true
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: yinka.settings
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
