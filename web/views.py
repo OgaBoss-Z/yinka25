@@ -77,6 +77,3 @@ def contact_view(request):
 
 
 
-def project_detail(request):
-    return render(request, 'web/project-detail.html')
-

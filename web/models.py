@@ -115,5 +115,22 @@ class Services(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    subject = models.CharField(max_length=120)
+    message = models.TextField()
+    created = models.DateField(default=timezone.now)
+    updated = models.DateField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Message'
+        verbose_name_plural = 'Messages' 
+        ordering = ['name'] 
+
+    def __str__(self):
+        return self.name
 
 
