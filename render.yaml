@@ -5,10 +5,6 @@ services:
     plan: free
     buildCommand: | pip install -r requirements.txt
     python manage.py collectstatic --noinput
-    python manage.py makemigrations
-    python manage.py migrate
-    python manage.py createsuperuser --noinput
-    --username yinkakayodeandco --email yinkakayode25@gmail.com || true
     autoDeploy: true
     envVars:
       - key: DATABASE_URL
@@ -20,7 +16,7 @@ services:
       - key: DJANGO_SUPERUSER_EMAIL
         value: yinkakayode25@gmail.com
       - key: DJANGO_SUPERUSER_PASSWORD
-        value: yinkakayode@2025!
+        value: yinka@co@2025
       - key: DJANGO_SETTINGS_MODULE
         value: yinka.settings
       
