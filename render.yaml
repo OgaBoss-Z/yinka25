@@ -6,6 +6,10 @@ services:
     buildCommand: | pip install -r requirements.txt
     python manage.py collectstatic --noinput
     autoDeploy: true
+    routes:
+      - type: rewrite
+        source: /media/(.*)
+        destinatiob: /media/\1
     envVars:
       - key: DATABASE_URL
         fromDatabase:
