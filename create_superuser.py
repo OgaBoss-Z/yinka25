@@ -8,7 +8,7 @@ django.setup()
 User = get_user_model()
 
 username = os.getenv('DJANGO_SUPERUSER_USERNAME', 'yinkaAdmin')
-email = os.getenv('DJANGO_SUPERUSER_EMAIL', 'yinkakayode@gmail.com')
+email = os.getenv('DJANGO_SUPERUSER_EMAIL', 'yinkakayode25@gmail.com')
 password = os.getenv('DJANGO_SUPERUSER_PASSWORD', 'yinka@co2025')
 
 if not User.objects.filter(username=username).exists():
