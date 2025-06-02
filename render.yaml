@@ -3,8 +3,14 @@ services:
     name: yinka-web-app
     env: python
     plan: free
-    buildCommand: "pip install -r requirements.txt"
+    buildCommand: | pip install -r requirements.txt
+    python manage.py collectstatic --noinput
+    python manage.py makemigrations
+    python manage.py migrate
+    python manage.py createsuperuser --noinput
+    --username yinkakayodeandco --email yinkakayode25@gmail.com || true
     autoDeploy: true
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: yinka.settings
+      
