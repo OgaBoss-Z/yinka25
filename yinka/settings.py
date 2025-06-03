@@ -1,6 +1,12 @@
 import dj_database_url
 import os 
+import cloudinary
+import cloudinary.api
+import cloudinary.uploader
 from pathlib import Path
+
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')  # default is local
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ckeditor',
     'ckeditor_uploader',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 
@@ -142,7 +150,19 @@ MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 MEDIA_URL = 'media/'
 MEDIA_ROOT = (os.path.join(BASE_DIR, 'media/'))
 
+default_file_storage = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+if ENVIRONMENT == 'production':
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+        'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+        'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+    }
+else:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Default primary key field type
