@@ -19,7 +19,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-2tp-js_wt#72iyq5pw266&qrann4!7)hxoc-@z_n7df$#u05jr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", "False") == "True"
+# DEBUG = os.environ.get("DEBUG", "False") == "True"
+DEBUG = os.getenv("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = ['*']
 
@@ -147,11 +148,26 @@ STATIC_ROOT = (os.path.join(BASE_DIR, 'staticfiles'))
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = (os.path.join(BASE_DIR, 'media/'))
+# MEDIA_URL = 'media/'
+# MEDIA_ROOT = (os.path.join(BASE_DIR, 'media/'))
 
-default_file_storage = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# default_file_storage = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+DEBUG = os.getenv("DEBUG", "True") == "True"
+
+if os.getenv("RENDER", "") == "true":
+    # ✅ Render production settings (Cloudinary for media)
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+        'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+        'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+    }
+else:
+    # ✅ Local development settings (use local media)
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+'''
 if os.getenv('RENDER','') == 'true':
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
@@ -163,7 +179,7 @@ if os.getenv('RENDER','') == 'true':
 else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
+'''
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
