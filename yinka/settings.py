@@ -152,7 +152,7 @@ MEDIA_ROOT = (os.path.join(BASE_DIR, 'media/'))
 
 default_file_storage = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-if ENVIRONMENT == 'production':
+if os.getenv('RENDER','') == 'true':
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
     CLOUDINARY_STORAGE = {
