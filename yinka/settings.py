@@ -153,7 +153,7 @@ MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
 # default_file_storage = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-DEBUG = os.getenv("DEBUG", "True") == "True"
+# DEBUG = os.getenv("DEBUG", "True") == "True"
 
 if os.getenv("RENDER", "") == "true":
     # ✅ Render production settings (Cloudinary for media)
@@ -167,6 +167,7 @@ else:
     # ✅ Local development settings (use local media)
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 '''
 if os.getenv('RENDER','') == 'true':
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
