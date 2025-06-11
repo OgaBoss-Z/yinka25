@@ -112,20 +112,20 @@ import cloudinary.uploader
 import cloudinary.api
 
 # Detect production via RENDER environment variable
-USE_RENDER = os.getenv("RENDER", "") == "True"
+USE_CLOUDINARY = os.getenv("RENDER", "").lower() == "true"
 
-if USE_RENDER:
-    print("⚙️ Using Cloudinary for media")
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+if USE_CLOUDINARY:
+    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
     CLOUDINARY_STORAGE = {
-        'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
-        'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
-        'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+        "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
+        "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
+        "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
     }
+    print("Cloudinary is configured and being used for media.")
 else:
-    print("⚙️ Using local storage for media")
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+    print("Using local media storage.")
 
 
 # Primary key type
