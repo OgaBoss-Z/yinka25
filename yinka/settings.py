@@ -132,5 +132,3 @@ else:
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 print("Using Cloudinary for media storage:", os.getenv("RENDER", "False") == "True")
-from django.conf import settings
-print(settings.DEFAULT_FILE_STORAGE)
