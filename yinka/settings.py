@@ -1,32 +1,24 @@
-import dj_database_url
-import os 
-import cloudinary
-import cloudinary.api
-import cloudinary.uploader
+import os
 from pathlib import Path
+import dj_database_url
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
-ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')  # default is local
+# Base directory
+BASE_DIR = Path(_file_).resolve().parent.parent
 
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-2tp-js_wt#72iyq5pw266&qrann4!7)hxoc-@z_n7df$#u05jr'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.environ.get("DEBUG", "False") == "True"
+# Environment
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = ['*']
+# Secret key
+SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-for-dev-only")
 
+# Allowed hosts
+ALLOWED_HOSTS = ['*']  # You can restrict this in production
 
-# Application definition
-
+# Installed apps
 INSTALLED_APPS = [
     'web.apps.WebConfig',
     'django.contrib.admin',
@@ -41,11 +33,13 @@ INSTALLED_APPS = [
     'cloudinary_storage',
 ]
 
+# CKEditor config
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
-CKEDITOR_UPLOAD_PATH = '/uploads'
-
+# Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # for static files in production
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -54,8 +48,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# URLs and WSGI
 ROOT_URLCONF = 'yinka.urls'
+WSGI_APPLICATION = 'yinka.wsgi.application'
 
+# Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -73,106 +70,41 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'yinka.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-DATABASE_URL = os.getenv('DATABASE_URL')
-
-if DATABASE_URL:
+# Database: use SQLite locally, PostgreSQL in production
+if os.getenv("RENDER", "") == "true" and os.getenv("DATABASE_URL"):
     DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+        'default': dj_database_url.parse(os.getenv("DATABASE_URL"), conn_max_age=600)
     }
 else:
-    # Local SQLite configuration
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(_file_)))
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 
-'''DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:///db.sqlite3',
-        #fallback for development
-        conn_max_age=600
-    )
-}
-
-default': {
-    'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': BASE_DIR / 'db.sqlite3',
-    }'''
-
-
 # Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'Africa/Lagos'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = 'static/'
-STATIC_ROOT = (os.path.join(BASE_DIR, 'staticfiles'))
+# Static files
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
-'''
-# MEDIA_URL = 'media/'
-# MEDIA_ROOT = (os.path.join(BASE_DIR, 'media/'))
-
-# default_file_storage = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-# DEBUG = os.getenv("DEBUG", "True") == "True"
-
+# Media files: use Cloudinary in production, local in development
 if os.getenv("RENDER", "") == "true":
-    # ✅ Render production settings (Cloudinary for media)
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-    CLOUDINARY_STORAGE = {
-        'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
-        'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
-        'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
-    }
-else:
-    # ✅ Local development settings (use local media)
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-
-if os.getenv('RENDER','') == 'true':
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
     CLOUDINARY_STORAGE = {
         'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
         'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
@@ -181,17 +113,18 @@ if os.getenv('RENDER','') == 'true':
 else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-'''
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
+# Primary key type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CLOUDINARY_STORAGE = {
+
+
+
+'''CLOUDINARY_STORAGE = {
         'CLOUD_NAME': 'dbgtsvbqf',
         'API_KEY': '737114819872525',
         'API_SECRET': 'BIqLiVDenEudIlhWWRxfHeYPnQ0',
     }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+'''
