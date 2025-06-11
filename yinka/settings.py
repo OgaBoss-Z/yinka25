@@ -115,6 +115,7 @@ import cloudinary.api
 
 # Detect production via RENDER environment variable
 USE_CLOUDINARY = os.getenv("RENDER", "").lower() == "true"
+print(" Using latest Cloudinary for media: ", USE_CLOUDINARY)
 
 if USE_CLOUDINARY:
     DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
