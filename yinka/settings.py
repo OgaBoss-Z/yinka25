@@ -6,7 +6,7 @@ import cloudinary.uploader
 import cloudinary.api
 
 # Base directory
-BASE_DIR = Path(_file_).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Environment
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
