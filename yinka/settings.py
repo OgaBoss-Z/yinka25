@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Environment
 RENDER = os.getenv('RENDER', "False") == 'True'
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = os.getenv("DEBUG", "True") == "True"
 
 # Secret key
 #SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-for-dev-only")
