@@ -9,7 +9,7 @@ import cloudinary.api
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Environment
-RENDER = os.getenv('RENDER') == 'true'
+RENDER = os.getenv('RENDER', "False") == 'True'
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
 # Secret key
@@ -122,3 +122,5 @@ else:
 
 # Primary key type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+print("Using Cloudinary for media storage:", os.getenv("RENDER", "False") == "True")
