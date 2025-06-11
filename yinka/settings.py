@@ -116,15 +116,3 @@ else:
 
 # Primary key type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-
-
-'''CLOUDINARY_STORAGE = {
-        'CLOUD_NAME': 'dbgtsvbqf',
-        'API_KEY': '737114819872525',
-        'API_SECRET': 'BIqLiVDenEudIlhWWRxfHeYPnQ0',
-    }
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-'''
