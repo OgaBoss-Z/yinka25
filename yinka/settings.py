@@ -12,6 +12,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 RENDER = os.getenv('RENDER', "False") == 'True'
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
+print("RENDER ENV VAR:", os.getenv("RENDER"))
+
 # Secret key
 #SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-for-dev-only")
 SECRET_KEY = 'django-insecure-2tp-js_wt#72iyq5pw266&qrann4!7)hxoc-@z_n7df$#u05jr'
