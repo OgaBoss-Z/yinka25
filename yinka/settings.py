@@ -108,7 +108,11 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
-if os.getenv("RENDER", "False") == "True":
+# Detect production via RENDER environment variable
+IS_RENDER = os.getenv("RENDER", "").lower() == "true"
+
+if IS_RENDER:
+    print("🔵 Cloudinary config is active.")
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
     CLOUDINARY_STORAGE = {
         'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
@@ -116,8 +120,10 @@ if os.getenv("RENDER", "False") == "True":
         'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
     }
 else:
+    print("🟢 Local file system storage is active.")
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Primary key type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
