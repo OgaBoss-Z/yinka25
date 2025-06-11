@@ -9,7 +9,7 @@ import cloudinary.api
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Environment
-ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
+RENDER = os.getenv('RENDER') == 'true'
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
 # Secret key
@@ -72,9 +72,9 @@ TEMPLATES = [
 ]
 
 # Database: use SQLite locally, PostgreSQL in production
-if os.getenv("RENDER", "") == "true" and os.getenv("DATABASE_URL"):
+if RENDER:
     DATABASES = {
-        'default': dj_database_url.parse(os.getenv("DATABASE_URL"), conn_max_age=600)
+        'default': dj_database_url.config(conn_max_age=600)
     }
 else:
     DATABASES = {
@@ -83,6 +83,7 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+    
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -99,12 +100,15 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files
+# STATIC
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
-# Media files: use Cloudinary in production, local in development
-if os.getenv("RENDER", "") == "true":
+# MEDIA
+if RENDER:
+    # Production: use Cloudinary
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
     CLOUDINARY_STORAGE = {
         'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
@@ -112,6 +116,7 @@ if os.getenv("RENDER", "") == "true":
         'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
     }
 else:
+    # Local dev: use filesystem
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
