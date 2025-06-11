@@ -1,27 +1,27 @@
 import os
 from pathlib import Path
 import dj_database_url
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
-print("DEBUG:", os.getenv("DEBUG"))
-print("RENDER:", os.getenv("RENDER"))
+# === BASE DIRECTORY ===
+BASE_DIR = Path(_file_).resolve().parent.parent
 
-# Base directory
-BASE_DIR = Path(__file__).resolve().parent.parent
+# === ENVIRONMENT DETECTION ===
+RENDER_ENV = os.getenv('RENDER', '').lower() == 'true'
+DEBUG = not RENDER_ENV  # False in production
 
-# Environment
-RENDER = os.getenv('RENDER', "False") == 'True'
-DEBUG = os.getenv("DEBUG", "True") == "True"
+print("🔍 RENDER_ENV:", RENDER_ENV)
+print("🔍 DEBUG:", DEBUG)
 
-print("RENDER ENV VAR:", os.getenv("RENDER"))
-
-# Secret key
-#SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-for-dev-only")
+# === SECRET KEY ===
 SECRET_KEY = 'django-insecure-2tp-js_wt#72iyq5pw266&qrann4!7)hxoc-@z_n7df$#u05jr'
 
-# Allowed hosts
-ALLOWED_HOSTS = ['*']  # You can restrict this in production
+# === ALLOWED HOSTS ===
+ALLOWED_HOSTS = ['*']  # 
 
-# Installed apps
+# === INSTALLED APPS ===
 INSTALLED_APPS = [
     'web.apps.WebConfig',
     'django.contrib.admin',
@@ -36,13 +36,10 @@ INSTALLED_APPS = [
     'cloudinary_storage',
 ]
 
-# CKEditor config
-CKEDITOR_UPLOAD_PATH = "uploads/"
-
-# Middleware
+# === MIDDLEWARE ===
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # for static files in production
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -51,11 +48,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# URLs and WSGI
+# === URL & WSGI ===
 ROOT_URLCONF = 'yinka.urls'
 WSGI_APPLICATION = 'yinka.wsgi.application'
 
-# Templates
+# === TEMPLATES ===
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -73,8 +70,8 @@ TEMPLATES = [
     },
 ]
 
-# Database: use SQLite locally, PostgreSQL in production
-if RENDER:
+# === DATABASES ===
+if RENDER_ENV:
     DATABASES = {
         'default': dj_database_url.config(conn_max_age=600)
     }
@@ -85,9 +82,8 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-    
 
-# Password validation
+# === PASSWORD VALIDATION ===
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -95,43 +91,33 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internationalization
+# === INTERNATIONALIZATION ===
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Africa/Lagos'
 USE_I18N = True
 USE_TZ = True
 
-# Static files
-# STATIC
+# === STATIC FILES ===
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
-# MEDIA
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
+# === CKEDITOR CONFIG ===
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
-# Detect production via RENDER environment variable
-USE_CLOUDINARY = os.getenv("RENDER", "").lower() == "true"
-print(" Using latest Cloudinary for media: ", USE_CLOUDINARY)
-
-if USE_CLOUDINARY:
+# === MEDIA FILE STORAGE ===
+if RENDER_ENV:
     DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
     CLOUDINARY_STORAGE = {
         "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
         "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
         "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
     }
-    print("Cloudinary is configured and being used for media.")
+    print("✅ Using Cloudinary for media storage.")
 else:
     MEDIA_URL = "/media/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-    print("Using local media storage.")
+    print("📁 Using local file storage.")
 
-
-# Primary key type
+# === PRIMARY KEY ===
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-print("Using Cloudinary for media storage:", os.getenv("RENDER", "False") == "True")
